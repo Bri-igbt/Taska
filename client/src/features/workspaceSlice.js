@@ -1,26 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../configs/api.js";
 
-export const fetchWorkspaces = createAsyncThunk(
-    "workspace/fetchWorkspaces",
-    async ({ getToken }, { rejectWithValue }) => {
-        try {
-        const token = await getToken();
+export const fetchWorkspaces = createAsyncThunk('workspace/fetchWorkspaces', async ({ getToken }) => {
+    try {
+        const { data } = await api.get('/api/workspaces', {headers: { Authorization: 
+            `Bearer ${await getToken()}`}})
 
-        const { data } = await api.get("/api/workspaces", {
-            headers: {
-            Authorization: `Bearer ${token}`,
-            },
-        });
-
-        return data.workspaces || [];
-        } catch (error) {
-        return rejectWithValue(
-            error?.response?.data?.message || error.message
-        );
-        }
+        return data.workspaces || []
+    } catch (error) {
+        console.log(error?.response?.data?.message || error.message)
+        return []
     }
-);
+})
 
 const initialState = {
     workspaces: [],
@@ -28,8 +19,6 @@ const initialState = {
     loading: false,
     error: null,
 };
-
-/* =================== SLICE =================== */
 
 const workspaceSlice = createSlice({
     name: "workspace",
@@ -116,30 +105,33 @@ const workspaceSlice = createSlice({
     },
 
     extraReducers: (builder) => {
-        builder
-        .addCase(fetchWorkspaces.pending, (state) => {
+        builder.addCase(fetchWorkspaces.pending, (state) => {
             state.loading = true;
-            state.error = null;
         })
-        .addCase(fetchWorkspaces.fulfilled, (state, action) => {
+        builder.addCase(fetchWorkspaces.fulfilled, (state, action) => {
             state.workspaces = action.payload;
-            state.loading = false;
-
             if (action.payload.length > 0) {
-            const savedId = localStorage.getItem("currentWorkspaceId");
-            state.currentWorkspace =
-                action.payload.find((w) => w.id === savedId) ||
-                action.payload[0];
+                const localStorageCurrentWorkspaceId = localStorage.getItem("currentWorkspaceId");
+
+                if (localStorageCurrentWorkspaceId) {
+                    const findWorkspace = action.payload.find((w) => w.id === localStorageCurrentWorkspaceId);
+
+                    if(findWorkspace) {
+                        state.currentWorkspace = findWorkspace
+                    }else {
+                        state.currentWorkspace = action.payload[0]
+                    }
+                } else {
+                    state.currentWorkspace = action.payload[0]
+                }
             }
-        })
-        .addCase(fetchWorkspaces.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload;
+        });
+        builder.addCase(fetchWorkspaces.rejected, (state, action) => {
+            state.loading = false;
         });
     },
 });
-
-/* =================== EXPORTS =================== */
 
 export const {
     setCurrentWorkspace,

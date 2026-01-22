@@ -1,11 +1,11 @@
-import { useState, useEffect, use } from 'react'
+import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import { Outlet } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadTheme } from '../features/themeSlice'
 import { Loader2Icon } from 'lucide-react'
-import { useUser, SignIn, useAuth, CreateOrganization, OrganizationSwitcher } from '@clerk/clerk-react'
+import { useUser, SignIn, useAuth, CreateOrganization } from '@clerk/clerk-react'
 import { fetchWorkspaces } from '../features/workspaceSlice.js'
 
 const Layout = () => {
@@ -20,14 +20,11 @@ const Layout = () => {
         dispatch(loadTheme())
     }, [])
 
-    // Initial load of workspaces after user is loaded
     useEffect(() => {
         if (isLoaded && user && workspaces.length === 0) {
             dispatch(fetchWorkspaces({getToken}))
         }
-        fetchWorkspaces()
     }, [user, isLoaded])
-
     if(!user) {
         return (
             <div className='flex items-center justify-center h-screen bg-white dark:bg-zinc-950'>
@@ -45,7 +42,7 @@ const Layout = () => {
     if(user && workspaces.length === 0) {
         return (
             <div className='min-h-screen flex justify-center items-center'>
-                <OrganizationSwitcher/>
+                <CreateOrganization />
             </div>
         )
     }

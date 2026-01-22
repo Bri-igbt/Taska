@@ -51,7 +51,8 @@ const syncUserUpdation = inngest.createFunction(
             data: {
                 email: data.email_addresses[0]?.email_address,
                 name: data.first_name + ' ' + data.last_name,
-                image: data?.image_url
+                slug: data.slug,
+                image_url: data.image_url || "",
             },
         })
     }
@@ -69,7 +70,7 @@ const syncWorkspaceCreation = inngest.createFunction(
                 name: data.name,
                 slug: data.slug,
                 ownerId: data.created_by,
-                image_url: data.image_url,
+                image_url: data.image_url || "",
             },
         })
 
@@ -97,7 +98,7 @@ const syncWorkspaceUpdation = inngest.createFunction(
             data: {
                 name: data.name,
                 slug: data.slug,
-                image_url: data.image_url,
+                image_url: data.image_url || "",
             },
         })
     }
