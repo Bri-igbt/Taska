@@ -5,7 +5,7 @@ import  prisma  from '../configs/prisma.js'
 export const inngest = new Inngest({ id: "Taska" });
 
 // Inngest function to save user data to database
-const saveUserData = inngest.createFunction(
+const syncUserCreation = inngest.createFunction(
     { id: "sync-user-from-clerk"},
     { event: "clerk/user.created" },
     async ({ event }) => {
@@ -23,7 +23,7 @@ const saveUserData = inngest.createFunction(
 )
 
 // Inngest function to delete user data from database
-const deleteUserData = inngest.createFunction(
+const syncUserDeletion = inngest.createFunction(
     { id: "delete-user-with-clerk"},
     { event: "clerk/user.deleted" },
     async ({ event }) => {
@@ -38,7 +38,7 @@ const deleteUserData = inngest.createFunction(
 )
 
 // Inngest function to update user data in database
-const updateUserData = inngest.createFunction(
+const syncUserUpdation = inngest.createFunction(
     { id: "update-user-with-clerk"},
     { event: "clerk/user.updated" },
     async ({ event }) => {
@@ -58,12 +58,11 @@ const updateUserData = inngest.createFunction(
 )
 
 // Inngest function to save workspace data to database
-const saveWorkspaceData = inngest.createFunction(
+const syncWorkspaceCreation = inngest.createFunction(
     { id: "sync-workspace-from-clerk"},
-    { event: "clerk/workspace.created" },
+    { event: "clerk/organization.created" },
     async ({ event }) => {
-        const { data } = event
-        // Simulate saving workspace data to database
+        const { data } = event;
         await prisma.workspace.create({
             data: {
                 id: data.id,
@@ -79,19 +78,18 @@ const saveWorkspaceData = inngest.createFunction(
             data: {
                 userId: data.created_by,
                 workspaceId: data.id,
-                role: 'ADMIN',
+                role: "ADMIN",
             },
         })
     }
 )
 
 // Ingest function to update workspace data in database
-const updateWorkspaceData = inngest.createFunction(
+const syncWorkspaceUpdation = inngest.createFunction(
     { id: "update-workspace-with-clerk"},
-    { event: "clerk/workspace.updated" },
+    { event: "clerk/organization.updated" },
     async ({ event }) => {
-        const { data } = event
-        // Simulate updating workspace data in database
+        const { data } = event;
         await prisma.workspace.updateMany({
             where: {
                 id: data.id,
@@ -106,12 +104,11 @@ const updateWorkspaceData = inngest.createFunction(
 )
 
 // Inngest function to delete workspace data from database
-const deleteWorkspaceData = inngest.createFunction(
+const syncWorkspaceDeletion = inngest.createFunction(
     { id: "delete-workspace-with-clerk"},
-    { event: "clerk/workspace.deleted" },
+    { event: "clerk/organization.deleted" },
     async ({ event }) => {
-        const { data } = event
-        // Simulate deleting workspace data from database
+        const { data } = event;
         await prisma.workspace.deleteMany({
             where: {
                 id: data.id,
@@ -121,12 +118,11 @@ const deleteWorkspaceData = inngest.createFunction(
 )
 
 // Inngest function to save workspace member data to database
-const saveWorkspaceMemberData = inngest.createFunction(
+const syncWorkspaceMemberCreation = inngest.createFunction(
     { id: "sync-workspace-member-from-clerk"},
     { event: "clerk/organizationInvitation.accepted" },
     async ({ event }) => {
-        const { data } = event
-        // Simulate saving workspace member data to database
+        const { data } = event;
         await prisma.workspaceMember.create({
             data: {
                 userId: data.user_id,
@@ -137,13 +133,12 @@ const saveWorkspaceMemberData = inngest.createFunction(
     }
 )
 
-// Create an empty array where we'll export future Inngest functions
 export const functions = [
-    saveUserData,
-    deleteUserData,
-    updateUserData,
-    saveWorkspaceData,
-    updateWorkspaceData,
-    deleteWorkspaceData,
-    saveWorkspaceMemberData
+    syncUserCreation,
+    syncUserDeletion,
+    syncUserUpdation,
+    syncWorkspaceCreation,
+    syncWorkspaceUpdation,
+    syncWorkspaceDeletion,
+    syncWorkspaceMemberCreation
 ];
