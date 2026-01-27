@@ -15,7 +15,6 @@ const Layout = () => {
     const { user, isLoaded } = useUser()
     const { getToken } = useAuth()
 
-    // Initial load of theme
     useEffect(() => {
         dispatch(loadTheme())
     }, [])
@@ -25,6 +24,7 @@ const Layout = () => {
             dispatch(fetchWorkspaces({getToken}))
         }
     }, [user, isLoaded])
+    
     if(!user) {
         return (
             <div className='flex items-center justify-center h-screen bg-white dark:bg-zinc-950'>
