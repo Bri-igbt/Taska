@@ -7,6 +7,8 @@ import { inngest, functions } from "./inngest/index.js"
 import workspaceRouter from './routes/workspace.routes.js';
 import { protect } from './middlewares/auth.middleware.js';
 import projectRouter from './routes/project.routes.js';
+import taskRouter from './routes/task.routes.js';
+import commentRouter from './routes/comment.routes.js';
 
 const app = express();
 
@@ -20,7 +22,9 @@ app.use("/api/inngest", serve({ client: inngest, functions }));
 
 // Routes
 app.use('/api/workspaces', protect, workspaceRouter);
-app.use('/api/project', protect, projectRouter);
+app.use('/api/projects', protect, projectRouter);
+app.use('/api/tasks', protect, taskRouter);
+app.use('/api/comments', protect, commentRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
