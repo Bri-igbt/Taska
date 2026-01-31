@@ -13,4 +13,7 @@ export const {
     CLERK_WEBHOOK_SECRET,
     INNGEST_EVENT_KEY,
     INNGEST_SIGNING_KEY,
+    SENDER_EMAIL,
+    SMTP_USER,
+    SMTP_PASS
 } = process.env;

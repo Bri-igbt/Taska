@@ -4,6 +4,6 @@ import { addComment, getTaskComments } from '../controllers/comments.controllers
 const commentRouter = Router();
 
 commentRouter.post('/', addComment);
-commentRouter.get('/', getTaskComments);
+commentRouter.get('/:taskId', getTaskComments);
 
 export default commentRouter
