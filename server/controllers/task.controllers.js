@@ -17,7 +17,7 @@ export const createTask = async (req, res) => {
         if(!project) {
             return res.status(404).json({ message: "Project not found"})
 
-        } else if(!project.team_lead !== userId) {
+        } else if(project.team_lead !== userId) {
             return res.status(403).json({ message: "You don't have admin privileges"})
 
         }else if(assigneeId && !project.members.find((member) => member.userId === assigneeId)) {
@@ -31,6 +31,7 @@ export const createTask = async (req, res) => {
                 description,
                 priority,
                 assigneeId,
+                type,
                 status,
                 due_date: new Date(due_date)
             }
@@ -55,6 +56,7 @@ export const createTask = async (req, res) => {
         res.status(500).json({ message: error.code || error.message});
     }
 }
+
 
 // update task
 export const updateTask = async (req, res) => {

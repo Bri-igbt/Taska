@@ -228,6 +228,7 @@ const sendtaskAssignmentEmail = inngest.createFunction(
     }
 )
 
+
 export const functions = [
     syncUserCreation,
     syncUserDeletion,
