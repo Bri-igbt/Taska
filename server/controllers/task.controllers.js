@@ -57,7 +57,6 @@ export const createTask = async (req, res) => {
     }
 }
 
-
 // update task
 export const updateTask = async (req, res) => {
     try {
@@ -80,7 +79,7 @@ export const updateTask = async (req, res) => {
         if(!project) {
             return res.status(404).json({ message: "Project not found"})
 
-        } else if(!project.team_lead !== userId) {
+        } else if(project.team_lead !== userId) {
             return res.status(403).json({ message: "You don't have admin privileges"})
 
         }
@@ -102,10 +101,14 @@ export const updateTask = async (req, res) => {
 export const deleteTask = async (req, res) => {
     try {
         const { userId } = await req.auth();
-        const { taskIds } = req.body;
+        const { tasksIds } = req.body;
+
+        if (!Array.isArray(tasksIds) || tasksIds.length === 0) {
+            return res.status(400).json({ message: "No task IDs provided" });
+        }
 
         const tasks = await prisma.task.findMany({
-            where: { id: { in: taskIds }}
+            where: { id: { in: tasksIds }}
         })
         
         if(tasks.length === 0) {
@@ -120,13 +123,13 @@ export const deleteTask = async (req, res) => {
         if(!project) {
             return res.status(404).json({ message: "Project not found"})
 
-        } else if(!project.team_lead !== userId) {
+        } else if(project.team_lead !== userId) {
             return res.status(403).json({ message: "You don't have admin privileges"})
 
         }
 
         await prisma.task.deleteMany({
-            where: { id: { in: taskIds} }
+            where: { id: { in: tasksIds} }
         })
 
         res.json({ message: "Task deleted successfully"})

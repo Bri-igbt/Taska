@@ -5,14 +5,16 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CalendarIcon, MessageCircle, PenIcon } from "lucide-react";
 import { assets } from "../assets/assets";
+import { useAuth, useUser } from "@clerk/clerk-react";
+import api from "../configs/api.js";
 
 const TaskDetails = () => {
-
     const [searchParams] = useSearchParams();
     const projectId = searchParams.get("projectId");
     const taskId = searchParams.get("taskId");
 
-    const user = { id : 'user_1'}
+    const {user} = useUser();
+    const { getToken } = useAuth();
     const [task, setTask] = useState(null);
     const [project, setProject] = useState(null);
     const [comments, setComments] = useState([]);
@@ -22,8 +24,32 @@ const TaskDetails = () => {
     const { currentWorkspace } = useSelector((state) => state.workspace);
 
     const fetchComments = async () => {
+        if (!taskId) return;
 
+        try {
+            const token = await getToken();
+            const { data } = await api.get(`/api/comments/${taskId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            setComments((prev) => {
+                const prevIds = new Set(prev.map(c => c.id));
+                const merged = [...prev];
+
+                for (const c of data || []) {
+                    if (!prevIds.has(c.id)) {
+                        merged.push(c);
+                    }
+                }
+
+                return merged;
+            });
+
+        } catch (error) {
+            toast.error(error?.response?.data?.message || error.message);
+        }
     };
+
 
     const fetchTaskDetails = async () => {
         setLoading(true);
@@ -47,12 +73,12 @@ const TaskDetails = () => {
 
             toast.loading("Adding comment...");
 
-            //  Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-
-            const dummyComment = { id: Date.now(), user: { id: 1, name: "User", image: assets.profile_img_a }, content: newComment, createdAt: new Date() };
-            
-            setComments((prev) => [...prev, dummyComment]);
+            const token = await getToken();
+            const { data } = await api.post(`/api/comments`, { taskId: task.id, content: newComment }, {
+                headers: { Authorization: `Bearer ${token}`}
+            })
+                        
+            setComments((prev) => [...prev, data.comment]);
             setNewComment("");
             toast.dismissAll();
             toast.success("Comment added.");
