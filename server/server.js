@@ -14,7 +14,7 @@ const app = express();
 
 const corsOptions = {
     origin: [
-        "https://taskka.netlify.app/",
+        "https://taskka.netlify.app",
     ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
