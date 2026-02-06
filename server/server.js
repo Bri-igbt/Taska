@@ -12,15 +12,24 @@ import commentRouter from './routes/comment.routes.js';
 
 const app = express();
 
+const corsOptions = {
+    origin: [
+        "https://taskka.netlify.app/",
+    ],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cors());
 app.use(clerkMiddleware())
 
 app.get('/', (req, res) => { res.send('Server is running') });
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
 
-// Routes
+// Routes (protected)
 app.use('/api/workspaces', protect, workspaceRouter);
 app.use('/api/projects', protect, projectRouter);
 app.use('/api/tasks', protect, taskRouter);
