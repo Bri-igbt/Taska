@@ -37,7 +37,6 @@ const InviteMemberDialog = ({ isDialogOpen, setIsDialogOpen }) => {
     return (
         <div className="fixed inset-0 bg-black/20 dark:bg-black/50 backdrop-blur flex items-center justify-center z-50">
             <div className="bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-xl p-6 w-full max-w-md text-zinc-900 dark:text-zinc-200">
-                {/* Header */}
                 <div className="mb-4">
                     <h2 className="text-xl font-bold flex items-center gap-2">
                         <UserPlus className="size-5 text-zinc-900 dark:text-zinc-200" /> Invite Team Member
@@ -49,9 +48,7 @@ const InviteMemberDialog = ({ isDialogOpen, setIsDialogOpen }) => {
                     )}
                 </div>
 
-                {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    {/* Email */}
                     <div className="space-y-2">
                         <label htmlFor="email" className="text-sm font-medium text-zinc-900 dark:text-zinc-200">
                             Email Address
@@ -62,7 +59,6 @@ const InviteMemberDialog = ({ isDialogOpen, setIsDialogOpen }) => {
                         </div>
                     </div>
 
-                    {/* Role */}
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-zinc-900 dark:text-zinc-200">Role</label>
                         <select value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} className="w-full rounded border border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-200 py-2 px-3 mt-1 focus:outline-none focus:border-blue-500 text-sm" >
@@ -71,7 +67,6 @@ const InviteMemberDialog = ({ isDialogOpen, setIsDialogOpen }) => {
                         </select>
                     </div>
 
-                    {/* Footer */}
                     <div className="flex justify-end gap-3 pt-2">
                         <button type="button" onClick={() => setIsDialogOpen(false)} className="px-5 py-2 rounded text-sm border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition" >
                             Cancel
