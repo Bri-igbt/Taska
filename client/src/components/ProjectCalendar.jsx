@@ -42,7 +42,6 @@ const ProjectCalendar = ({ tasks }) => {
 
     return (
         <div className="grid lg:grid-cols-3 gap-6">
-            {/* Calendar View */}
             <div className="lg:col-span-2 ">
                 <div className="not-dark:bg-white dark:bg-gradient-to-br dark:from-zinc-800/70 dark:to-zinc-900/50 border border-zinc-300 dark:border-zinc-800 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-4">
@@ -90,7 +89,6 @@ const ProjectCalendar = ({ tasks }) => {
                     </div>
                 </div>
 
-                {/* Tasks for Selected Day */}
                 {getTasksForDate(selectedDate).length > 0 && (
                     <div className=" not-dark:bg-white mt-6 dark:bg-gradient-to-br dark:from-zinc-800/70 dark:to-zinc-900/50 border border-zinc-300 dark:border-zinc-800 rounded-lg p-4">
                         <h3 className="text-zinc-900 dark:text-white text-lg mb-3">
@@ -124,9 +122,7 @@ const ProjectCalendar = ({ tasks }) => {
                 )}
             </div>
 
-            {/* Sidebar */}
             <div className="space-y-6">
-                {/* Upcoming Tasks */}
                 <div className="bg-white dark:bg-zinc-950 dark:bg-gradient-to-br dark:from-zinc-800/70 dark:to-zinc-900/50 border border-zinc-300 dark:border-zinc-800 rounded-lg p-4">
                     <h3 className="text-zinc-900 dark:text-white text-sm flex items-center gap-2 mb-3">
                         <Clock className="w-4 h-4" /> Upcoming Tasks
@@ -153,7 +149,6 @@ const ProjectCalendar = ({ tasks }) => {
                     )}
                 </div>
 
-                {/* Overdue Tasks */}
                 {overdueTasks.length > 0 && (
                     <div className="bg-white dark:bg-zinc-950  border border-red-300 dark:border-red-500 border-l-4 rounded-lg p-4">
                         <h3 className="text-red-700 dark:text-red-400 text-sm flex items-center gap-2 mb-3">
